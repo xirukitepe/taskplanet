@@ -7,18 +7,52 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "TableViewController.h"
+#import "CreateToDoViewController.h"
+#import "NotificationsViewController.h"
+#import "SettingsViewController.h"
 
 @interface AppDelegate ()
-
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    tabBarController.viewControllers = [self initializeViews];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = tabBarController;
+    [self.window makeKeyAndVisible];
+    
+    NotificationsViewController *notifs = [[NotificationsViewController alloc] init];
+    [notifs registerNotifs:application];
+    [notifs launchOptions:launchOptions resetBadge:application];
     return YES;
 }
+
+-(NSArray *)initializeViews{
+    TableViewController *tableViewController = [[TableViewController alloc] init];
+    //ViewController *greetingView = [[ViewController alloc] init];
+    CreateToDoViewController *createToDoController = [[CreateToDoViewController alloc] init];
+    UINavigationController *navigationController1 = [[UINavigationController alloc] initWithRootViewController: createToDoController];
+     UINavigationController *navigationController2 = [[UINavigationController alloc] initWithRootViewController: tableViewController];
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
+    navigationController1.navigationBar.backgroundColor = [UIColor lightGrayColor];
+    NSArray *controllers = [NSArray arrayWithObjects: navigationController1, navigationController2,  settingsViewController, nil];
+    return controllers;
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NotificationsViewController *notifs = [[NotificationsViewController alloc] init];
+    [notifs showNotifs:notification];
+    [notifs setUpIconBadge:application];
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -30,12 +64,20 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    application.applicationIconBadgeNumber = 0;
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    if([self registerNotifs:application] == YES){
+//         application.applicationIconBadgeNumber = 0;
+//    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -43,6 +85,8 @@
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
 }
+
+
 
 #pragma mark - Core Data stack
 

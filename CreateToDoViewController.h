@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CreateToDoViewController.h
 //  TodoList
 //
 //  Created by Shiela S on 2/9/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UITextFieldDelegate>
 
-
+@interface CreateToDoViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate>
 @end
-
