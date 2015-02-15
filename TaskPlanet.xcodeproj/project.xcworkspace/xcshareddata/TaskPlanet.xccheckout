@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>AAF527DC-4484-41F8-8BF2-81F98EA91908</string>
+	<key>IDESourceControlProjectName</key>
+	<string>TaskPlanet</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9B5EFB9F24C0B46AD5F78557575D768EC35C8621</key>
+		<string>github.com:xirukitepe/taskplanet.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>TaskPlanet.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9B5EFB9F24C0B46AD5F78557575D768EC35C8621</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:xirukitepe/taskplanet.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9B5EFB9F24C0B46AD5F78557575D768EC35C8621</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9B5EFB9F24C0B46AD5F78557575D768EC35C8621</string>
+			<key>IDESourceControlWCCName</key>
+			<string>TodoList</string>
+		</dict>
+	</array>
+</dict>
+</plist>

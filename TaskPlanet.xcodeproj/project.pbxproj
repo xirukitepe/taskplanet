@@ -97,25 +97,13 @@
 		E8D3EA941A88B90700101E29 /* TodoList */ = {
 			isa = PBXGroup;
 			children = (
-				E8D3EA991A88B90700101E29 /* AppDelegate.h */,
-				E8D3EA9A1A88B90700101E29 /* AppDelegate.m */,
-				E8D3EAC61A88E2A800101E29 /* CreateToDoViewController.h */,
-				E8D3EAC71A88E2A800101E29 /* CreateToDoViewController.m */,
-				E85F0CF31A8D090D00E2541B /* NotificationsViewController.h */,
-				E85F0CF41A8D090D00E2541B /* NotificationsViewController.m */,
-				E8F51FED1A90A0F6002F524A /* SettingsViewController.h */,
-				E8F51FEE1A90A0F6002F524A /* SettingsViewController.m */,
-				E8D3EAC01A88E00200101E29 /* TableViewController.h */,
-				E8D3EAC11A88E00200101E29 /* TableViewController.m */,
-				E8D3EA9F1A88B90700101E29 /* ViewController.h */,
-				E8D3EAA01A88B90700101E29 /* ViewController.m */,
-				E8F239E31A8B9406000D239E /* DetailViewController.h */,
-				E8F239E41A8B9406000D239E /* DetailViewController.m */,
-				E8D3EAA51A88B90700101E29 /* Images.xcassets */,
-				E8C9509A1A8CC69F00B1D891 /* LaunchScreen.xib */,
+				E8F51FFA1A911843002F524A /* Templates */,
+				E8F51FF81A91181A002F524A /* Data Model */,
+				E8F51FF61A9117F0002F524A /* Images */,
+				E8F51FF51A9117CB002F524A /* Controllers */,
+				E8F51FF31A91178B002F524A /* _root */,
 				E8D3EABF1A88C37E00101E29 /* Common */,
 				E8D3EA951A88B90700101E29 /* Supporting Files */,
-				E8D3EA9C1A88B90700101E29 /* TodoList.xcdatamodeld */,
 			);
 			path = TodoList;
 			sourceTree = "<group>";
@@ -153,6 +141,58 @@
 			);
 			name = Common;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		E8F51FF31A91178B002F524A /* _root */ = {
+			isa = PBXGroup;
+			children = (
+				E8D3EA9A1A88B90700101E29 /* AppDelegate.m */,
+				E8D3EA991A88B90700101E29 /* AppDelegate.h */,
+			);
+			name = _root;
+			sourceTree = "<group>";
+		};
+		E8F51FF51A9117CB002F524A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E8D3EAC61A88E2A800101E29 /* CreateToDoViewController.h */,
+				E8D3EAC71A88E2A800101E29 /* CreateToDoViewController.m */,
+				E85F0CF31A8D090D00E2541B /* NotificationsViewController.h */,
+				E85F0CF41A8D090D00E2541B /* NotificationsViewController.m */,
+				E8F51FED1A90A0F6002F524A /* SettingsViewController.h */,
+				E8F51FEE1A90A0F6002F524A /* SettingsViewController.m */,
+				E8D3EAC01A88E00200101E29 /* TableViewController.h */,
+				E8D3EAC11A88E00200101E29 /* TableViewController.m */,
+				E8D3EA9F1A88B90700101E29 /* ViewController.h */,
+				E8D3EAA01A88B90700101E29 /* ViewController.m */,
+				E8F239E31A8B9406000D239E /* DetailViewController.h */,
+				E8F239E41A8B9406000D239E /* DetailViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		E8F51FF61A9117F0002F524A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				E8D3EAA51A88B90700101E29 /* Images.xcassets */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		E8F51FF81A91181A002F524A /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				E8D3EA9C1A88B90700101E29 /* TodoList.xcdatamodeld */,
+			);
+			name = "Data Model";
+			sourceTree = "<group>";
+		};
+		E8F51FFA1A911843002F524A /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				E8C9509A1A8CC69F00B1D891 /* LaunchScreen.xib */,
+			);
+			name = Templates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
