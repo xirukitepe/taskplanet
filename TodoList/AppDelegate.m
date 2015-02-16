@@ -41,8 +41,9 @@
     UINavigationController *navigationController1 = [[UINavigationController alloc] initWithRootViewController: createToDoController];
      UINavigationController *navigationController2 = [[UINavigationController alloc] initWithRootViewController: tableViewController];
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
+    UINavigationController *navigationController3 = [[UINavigationController alloc] initWithRootViewController: settingsViewController];
     navigationController1.navigationBar.backgroundColor = [UIColor lightGrayColor];
-    NSArray *controllers = [NSArray arrayWithObjects: navigationController1, navigationController2,  settingsViewController, nil];
+    NSArray *controllers = [NSArray arrayWithObjects: navigationController1, navigationController2,  navigationController3, nil];
     return controllers;
 }
 

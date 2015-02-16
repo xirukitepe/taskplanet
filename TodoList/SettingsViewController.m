@@ -9,6 +9,8 @@
 #import "SettingsViewController.h"
 #import "Constants.h"
 #import "AppDelegate.h"
+#import "FeedbackViewController.h"
+#import "CreateToDoViewController.h"
 
 @interface SettingsViewController ()
 @property (strong, nonatomic) UILabel *avatarLabel;
@@ -16,6 +18,9 @@
 @property (strong, nonatomic) UIButton *takePhotoBtn;
 @property (strong, nonatomic) UIButton *pickPhotoBtn;
 @property (strong, nonatomic) UIImage *selectedImage;
+@property (strong, nonatomic) UILabel *settingsLabel;
+@property (strong, nonatomic) NSArray *rows;
+@property (strong, nonatomic) MFMailComposeViewController *mc;
 @end
 
 @implementation SettingsViewController
@@ -37,7 +42,11 @@
     [self.view addSubview:self.imagePreview];
     [self.view addSubview:self.takePhotoBtn];
     [self.view addSubview:self.pickPhotoBtn];
-    [self.view setBackgroundColor:[UIColor lightGrayColor]];
+    [self.view addSubview:self.settingsLabel];
+    [self.view addSubview:self.tableView];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"CellSettings"];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    self.rows = @[@"Send Feedback", @"Share to a friend", @"Log Out"];
     
 }
 
@@ -56,10 +65,21 @@
     if (!_avatarLabel) {
         _avatarLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, FULL_WIDTH, 30)];
 //        _avatarLabel.center = CGPointMake(SCREEN_CENTER_X, ELEM_MARGIN + self.view.frame.origin.y);
-        _avatarLabel.frame = CGRectMake(SCREEN_MARGIN,  ELEM_MARGIN, _avatarLabel.frame.size.width, _avatarLabel.frame.size.height);
+        _avatarLabel.frame = CGRectMake(SCREEN_MARGIN, SCREEN_MARGIN, _avatarLabel.frame.size.width, _avatarLabel.frame.size.height);
         _avatarLabel.text = @"Profile Avatar";
     }
     return _avatarLabel;
+}
+
+-(UILabel *)settingsLabel{
+    if (!_settingsLabel) {
+        _settingsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, FULL_WIDTH, 30)];
+        _settingsLabel.frame = CGRectMake(SCREEN_MARGIN,  self.pickPhotoBtn.frame.origin.y + self.pickPhotoBtn.frame.size.height + ELEM_MARGIN, _settingsLabel.frame.size.width, _settingsLabel.frame.size.height);
+        _settingsLabel.text = @"Settings & Privacy";
+        _settingsLabel.textColor = BUTTON_BG_GREEN;
+        _settingsLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    }
+    return _settingsLabel;
 }
 
 -(UIImageView *)imagePreview{
@@ -79,7 +99,7 @@
 
 -(UIButton *)takePhotoBtn{
     if (!_takePhotoBtn) {
-        _takePhotoBtn =  [[UIButton alloc] initWithFrame:CGRectMake(0, 0, SCREEN_CENTER_X  / 2, BUTTON_HEIGHT)];
+        _takePhotoBtn =  [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.imagePreview.frame.size.width / 2, BUTTON_HEIGHT)];
         _takePhotoBtn.frame = CGRectMake(self.imagePreview.frame.origin.x, self.imagePreview.frame.origin.y + self.imagePreview.frame.size.height + SCREEN_MARGIN, _takePhotoBtn.frame.size.width, _takePhotoBtn.frame.size.height);
         _takePhotoBtn.backgroundColor = [UIColor blackColor];
         _takePhotoBtn.layer.cornerRadius = 3.0f;
@@ -92,7 +112,7 @@
 
 -(UIButton *)pickPhotoBtn{
     if (!_pickPhotoBtn) {
-        _pickPhotoBtn =  [[UIButton alloc] initWithFrame:CGRectMake(0, 0, SCREEN_CENTER_X  / 2 , BUTTON_HEIGHT)];
+        _pickPhotoBtn =  [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.imagePreview.frame.size.width / 2 , BUTTON_HEIGHT)];
         _pickPhotoBtn.frame = CGRectMake(self.takePhotoBtn.frame.size.width + self.takePhotoBtn.frame.origin.x + SCREEN_MARGIN, self.imagePreview.frame.origin.y + self.imagePreview.frame.size.height + SCREEN_MARGIN, _pickPhotoBtn.frame.size.width, _pickPhotoBtn.frame.size.height);
         _pickPhotoBtn.backgroundColor = [UIColor blackColor];
         _pickPhotoBtn.layer.cornerRadius = 3.0f;
@@ -101,6 +121,16 @@
         [_pickPhotoBtn addTarget:self action:@selector(selectPhoto) forControlEvents:UIControlEventTouchUpInside];
     }
     return  _pickPhotoBtn;
+}
+
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.settingsLabel.frame.origin.y + self.settingsLabel.frame.size.height + SCREEN_MARGIN, SCREEN_WIDTH, SCREEN_HEIGHT - self.imagePreview.frame.size.height - (ELEM_MARGIN * 2) - self.pickPhotoBtn.frame.origin.y - self.pickPhotoBtn.frame.size.height)];
+        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height);
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+    }
+    return _tableView;
 }
 
 #pragma mark - methods
@@ -184,14 +214,23 @@
 
 -(void)saveAvatar:(UIImage * )selectedImage{
     
+    // Get Entity
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Profile" inManagedObjectContext:self.managedObjectContext];
     
-    // Initialize Record
-    NSManagedObject *userInfo = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
-    
-    // Populate Record
+    // Convert to PNG
     NSData *convertedImage = UIImagePNGRepresentation(selectedImage);
-    [userInfo setValue:convertedImage forKey:@"avatar"];
+    
+    if ([self.userInfo count] != 0) {
+        // Update Record
+        [self.userInfo[0] setValue:convertedImage forKey:@"avatar"];
+    } else{
+    
+        // Initialize Record
+        NSManagedObject *userInfo = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Populate Record
+        [userInfo setValue:convertedImage forKey:@"avatar"];
+    }
     
     // Save Record
     NSError *error = nil;
@@ -211,6 +250,116 @@
     }
 }
 
+-(void)showMailComposer{
+    if([MFMailComposeViewController canSendMail]){
+        // Email Subject
+        NSString *emailTitle = @"Feedback for Task Planet";
+        // Email Content
+        NSString *messageBody = @"Your feedback here.";
+        // To address
+        NSArray *toRecipents = [NSArray arrayWithObject:@"shielas@sourcepad.com"];
+        
+        self.mc = [[MFMailComposeViewController alloc] init];
+        self.mc.mailComposeDelegate = self;
+        [self.mc setSubject:emailTitle];
+        [self.mc setMessageBody:messageBody isHTML:NO];
+        [self.mc setToRecipients:toRecipents];
+        
+        
+        // Present mail view controller on screen
+        [self presentViewController:self.mc animated:YES completion:NULL];
+    } else {
+        NSLog(@"Can't send email at this time.");
+    }
+}
+
+-(void)showActivityController{
+    NSString *textToShare = @"Look at this awesome todo list app!";
+    NSURL *myWebsite = [NSURL URLWithString:@"http://taskplanet.com/"];
+    
+    NSArray *objectsToShare = @[textToShare, myWebsite];
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+    
+    [self presentViewController:activityVC animated:YES completion:nil];
+}
+
+#pragma mark - delegate methods
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //FeedbackViewController *feedbackViewController = [[FeedbackViewController alloc] init];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    tabBarController.viewControllers = [appDelegate initializeViews];
+    switch (indexPath.row) {
+        case 0:
+            //[self.navigationController pushViewController:feedbackViewController animated:YES];
+            [self showMailComposer];
+            break;
+        case 1:
+            [self showActivityController];
+            break;
+        default:
+            [self presentViewController:tabBarController animated:YES completion:nil];
+            break;
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView
+           editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    return UITableViewCellEditingStyleDelete;
+}
+
+// This will tell your UITableView how many rows you wish to have in each section.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 3;
+}
+
+// This will tell your UITableView what data to put in which cells in your table.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"CellSettings";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    
+    if (cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    
+    if (indexPath.section == 0) {
+        cell.textLabel.text = [self.rows objectAtIndex:indexPath.row];
+    }
+    
+    return cell;
+
+}
 
 
 /*
