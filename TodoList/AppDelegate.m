@@ -52,6 +52,8 @@
     NotificationsViewController *notifs = [[NotificationsViewController alloc] init];
     [notifs showNotifs:notification];
     [notifs setUpIconBadge:application];
+    
+    TableViewController *tableView = [[TableViewController alloc] init];
 }
 
 

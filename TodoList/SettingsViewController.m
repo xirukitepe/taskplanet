@@ -112,12 +112,12 @@
 
 -(UIButton *)pickPhotoBtn{
     if (!_pickPhotoBtn) {
-        _pickPhotoBtn =  [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.imagePreview.frame.size.width / 2 , BUTTON_HEIGHT)];
+        _pickPhotoBtn =  [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.imagePreview.frame.size.width / 2 - SCREEN_MARGIN , BUTTON_HEIGHT)];
         _pickPhotoBtn.frame = CGRectMake(self.takePhotoBtn.frame.size.width + self.takePhotoBtn.frame.origin.x + SCREEN_MARGIN, self.imagePreview.frame.origin.y + self.imagePreview.frame.size.height + SCREEN_MARGIN, _pickPhotoBtn.frame.size.width, _pickPhotoBtn.frame.size.height);
         _pickPhotoBtn.backgroundColor = [UIColor blackColor];
         _pickPhotoBtn.layer.cornerRadius = 3.0f;
         [_pickPhotoBtn setTitle:@"Select photo" forState:UIControlStateNormal];
-        _pickPhotoBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        _pickPhotoBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
         [_pickPhotoBtn addTarget:self action:@selector(selectPhoto) forControlEvents:UIControlEventTouchUpInside];
     }
     return  _pickPhotoBtn;

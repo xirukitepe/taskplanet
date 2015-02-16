@@ -269,7 +269,8 @@
     localNotification.fireDate = pickerDate;
     localNotification.timeZone = [NSTimeZone defaultTimeZone];
     localNotification.alertBody = self.taskName.text;
-    localNotification.alertAction = @"Todo item alert!!!";
+    localNotification.alertAction = @"check todo item!";
+    localNotification.alertLaunchImage = @"AppIcon";
     localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     //[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
