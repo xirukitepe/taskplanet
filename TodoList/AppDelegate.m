@@ -7,11 +7,13 @@
 //
 
 #import "AppDelegate.h"
+#import <FacebookSDK/FacebookSDK.h>
 #import "ViewController.h"
 #import "TableViewController.h"
 #import "CreateToDoViewController.h"
 #import "NotificationsViewController.h"
 #import "SettingsViewController.h"
+#import "CommonViewController.h"
 
 @interface AppDelegate ()
 @end
@@ -22,38 +24,23 @@
     // Override point for customization after application launch.
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = [self initializeViews];
+    CommonViewController *common = [[CommonViewController alloc] init];
+    tabBarController.viewControllers = [common initializeViews];
+    [tabBarController.tabBar setBackgroundColor:[UIColor whiteColor]];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = tabBarController;
+   self.window.rootViewController = tabBarController;
+   // self.window.rootViewController = homeViewController;
     [self.window makeKeyAndVisible];
     
     NotificationsViewController *notifs = [[NotificationsViewController alloc] init];
     [notifs registerNotifs:application];
     [notifs launchOptions:launchOptions resetBadge:application];
-    return YES;
-}
-
--(NSArray *)initializeViews{
-    TableViewController *tableViewController = [[TableViewController alloc] init];
-    //ViewController *greetingView = [[ViewController alloc] init];
-    CreateToDoViewController *createToDoController = [[CreateToDoViewController alloc] init];
-    UINavigationController *navigationController1 = [[UINavigationController alloc] initWithRootViewController: createToDoController];
-     UINavigationController *navigationController2 = [[UINavigationController alloc] initWithRootViewController: tableViewController];
-    SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
-    UINavigationController *navigationController3 = [[UINavigationController alloc] initWithRootViewController: settingsViewController];
-    navigationController1.navigationBar.backgroundColor = [UIColor lightGrayColor];
-    NSArray *controllers = [NSArray arrayWithObjects: navigationController1, navigationController2,  navigationController3, nil];
-    return controllers;
-}
-
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    NotificationsViewController *notifs = [[NotificationsViewController alloc] init];
-    [notifs showNotifs:notification];
-    [notifs setUpIconBadge:application];
     
-    TableViewController *tableView = [[TableViewController alloc] init];
+    [FBLoginView class];
+    [FBProfilePictureView class];
+    
+    return YES;
 }
 
 
@@ -77,10 +64,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
-//    if([self registerNotifs:application] == YES){
-//         application.applicationIconBadgeNumber = 0;
-//    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -89,7 +72,23 @@
     [self saveContext];
 }
 
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NotificationsViewController *notifs = [[NotificationsViewController alloc] init];
+    [notifs showNotifs:notification];
+    [notifs setUpIconBadge:application];
+    
+    TableViewController *tableView = [[TableViewController alloc] init];
+}
 
+
+#pragma mark - Facebook Login
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    
+    return [FBAppCall handleOpenURL:url
+                  sourceApplication:sourceApplication];
+}
 
 #pragma mark - Core Data stack
 

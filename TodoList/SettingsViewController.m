@@ -8,9 +8,10 @@
 
 #import "SettingsViewController.h"
 #import "Constants.h"
-#import "AppDelegate.h"
 #import "FeedbackViewController.h"
+#import <CoreData/CoreData.h>
 #import "CreateToDoViewController.h"
+#import "CommonViewController.h"
 
 @interface SettingsViewController ()
 @property (strong, nonatomic) UILabel *avatarLabel;
@@ -46,9 +47,10 @@
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"CellSettings"];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    self.rows = @[@"Send Feedback", @"Share to a friend", @"Log Out"];
+    self.rows = @[@"Send Feedback", @"Share to a friend via email", @"Share to a friend via SMS" ,@"Log Out"];
     
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -92,6 +94,13 @@
         
         if([self.userInfo count] != 0){
             _imagePreview.image = [UIImage imageWithData:[self.userInfo[0] valueForKey:@"avatar"]];
+        } else {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            if([userDefaults objectForKey:@"userID"] == nil){
+                _imagePreview.image = [UIImage imageNamed:@"defaultAvatar"];
+            }
+            _imagePreview.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString: [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=200&height=200", [userDefaults objectForKey:@"userID"]]]]];
         }
     }
     return _imagePreview;
@@ -284,6 +293,25 @@
     [self presentViewController:activityVC animated:YES completion:nil];
 }
 
+-(void)showSMS{
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSArray *recipents = @[@"12345678", @"72345524"];
+    NSString *message = @"Here comes the happiest place on your phone, the Task Planet!";
+    
+    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+    messageController.messageComposeDelegate = self;
+    [messageController setRecipients:recipents];
+    [messageController setBody:message];
+    
+    // Present message view controller on screen
+    [self presentViewController:messageController animated:YES completion:nil];
+}
+
 #pragma mark - delegate methods
 
 -(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
@@ -312,9 +340,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //FeedbackViewController *feedbackViewController = [[FeedbackViewController alloc] init];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    //CommonViewController *common = [[CommonViewController alloc] init];
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = [appDelegate initializeViews];
+    //tabBarController.viewControllers = [common initializeViews];
     switch (indexPath.row) {
         case 0:
             //[self.navigationController pushViewController:feedbackViewController animated:YES];
@@ -322,6 +350,9 @@
             break;
         case 1:
             [self showActivityController];
+            break;
+        case 2:
+            [self showSMS];
             break;
         default:
             [self presentViewController:tabBarController animated:YES completion:nil];
@@ -339,7 +370,7 @@
 // This will tell your UITableView how many rows you wish to have in each section.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 4;
 }
 
 // This will tell your UITableView what data to put in which cells in your table.
@@ -361,6 +392,28 @@
 
 }
 
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult) result
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            break;
+            
+        case MessageComposeResultFailed:
+        {
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [warningAlert show];
+            break;
+        }
+            
+        case MessageComposeResultSent:
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 /*
 #pragma mark - Navigation

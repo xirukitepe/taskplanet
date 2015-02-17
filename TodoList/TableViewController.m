@@ -75,6 +75,55 @@
     return self.tasks.count;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    // delete from core data
+    if (editingStyle == UITableViewCellEditingStyleDelete){
+        [context deleteObject:[self.tasks objectAtIndex:indexPath.row]];
+        
+        NSError *error = nil;
+        if (![context save:&error]) {
+            NSLog(@"Can't delete!");
+            return;
+        }
+        
+        // Remove the row from data model
+        [self.tasks removeObjectAtIndex:indexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        // Request table view to reload
+        [tableView reloadData];
+        
+    }
+}
+
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
+    return YES;
+}
+
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSMutableArray *item = [self.tasks objectAtIndex:sourceIndexPath.row];
+    [self.tasks removeObject:item];
+    [self.tasks insertObject:item atIndex:[destinationIndexPath row]];
+    
+    int i = 0;
+    for (NSManagedObject *mo in self.tasks)
+    {
+        [mo setValue:[NSNumber numberWithInt:i++] forKey:@"displayOrder"];
+    }
+    
+    [context save:nil];
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"CellTask";
@@ -114,59 +163,4 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self.navigationItem setTitle:@"All Tasks"];
 }
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    NSManagedObjectContext *context = [self managedObjectContext];
-
-    // delete from core data
-    if (editingStyle == UITableViewCellEditingStyleDelete){
-        [context deleteObject:[self.tasks objectAtIndex:indexPath.row]];
-        
-        NSError *error = nil;
-        if (![context save:&error]) {
-            NSLog(@"Can't delete!");
-            return;
-        }
-        
-        // Remove the row from data model
-        [self.tasks removeObjectAtIndex:indexPath.row];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        // Request table view to reload
-        [tableView reloadData];
-
-    }
-}
-
--(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
-    return YES;
-}
-
--(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
-    NSManagedObjectContext *context = [self managedObjectContext];
-    NSMutableArray *item = [self.tasks objectAtIndex:sourceIndexPath.row];
-    [self.tasks removeObject:item];
-    [self.tasks insertObject:item atIndex:[destinationIndexPath row]];
-    
-    int i = 0;
-    for (NSManagedObject *mo in self.tasks)
-    {
-        [mo setValue:[NSNumber numberWithInt:i++] forKey:@"displayOrder"];
-    }
-    
-    [context save:nil];
-}
-
-
-//-(NSInteger *)countData{
-//    NSInteger *counts = self.tasks.count;
-//    return 5;
-//}
 @end

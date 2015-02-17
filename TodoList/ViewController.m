@@ -24,9 +24,6 @@
     [self.view addSubview:self.greetings];
     [self.view addSubview:self.name];
     [self.view addSubview:self.submitName];
-  
-
-    
     
     [self backgroundImage];
 }

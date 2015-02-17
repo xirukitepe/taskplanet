@@ -23,6 +23,14 @@
 
 @implementation CreateToDoViewController
 
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    // tab configs
+    UIImage *addIcon = [UIImage imageNamed:@"add-icon"];
+    self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Add" image:nil selectedImage:nil];
+    [self.tabBarItem setImage: [addIcon imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -37,7 +45,6 @@
 
     [self backgroundImage];
     [self setUpNavigationBar];
-    [self setUpTabBar];
     
      self.wrapper.center = CGPointMake(SCREEN_CENTER_X, self.taskName.frame.size.height + self.taskDescription.frame.size.height + self.doneBtn.frame.size.height + self.dueDate.frame.size.height - self.taskName.frame.origin.y + (ELEM_MARGIN));
     self.wrapper.frame = CGRectMake(self.wrapper.frame.origin.x, self.wrapper.frame.origin.y, self.wrapper.frame.size.width, self.wrapper.frame.size.height);
@@ -48,7 +55,7 @@
 -(UILabel *)pageTitle{
     if (!_pageTitle) {
         _pageTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.wrapper.frame.size.width - SCREEN_MARGIN, 30)];
-        _pageTitle.center = CGPointMake(SCREEN_CENTER_X, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + (SCREEN_MARGIN * 2));
+        _pageTitle.center = CGPointMake(SCREEN_CENTER_X, (SCREEN_MARGIN * 2));
         _pageTitle.frame = CGRectMake(_pageTitle.frame.origin.x, _pageTitle.frame.origin.y, _pageTitle.frame.size.width, _pageTitle.frame.size.height);
         _pageTitle.text = @"New Task";
         _pageTitle.textColor = [UIColor whiteColor];
@@ -111,7 +118,7 @@
 -(UIButton *)doneBtn{
     if (!_doneBtn) {
         _doneBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.wrapper.frame.size.width - SCREEN_MARGIN, BUTTON_HEIGHT)];
-        _doneBtn.center = CGPointMake(SCREEN_CENTER_X, self.tabBarController.tabBar.frame.origin.y - self.tabBarController.tabBar.frame.size.height );
+        _doneBtn.center = CGPointMake(SCREEN_CENTER_X, self.dueDate.frame.origin.y + self.dueDate.frame.size.height + ELEM_MARGIN);
         _doneBtn.frame = CGRectMake(_doneBtn.frame.origin.x, _doneBtn.frame.origin.y, _doneBtn.frame.size.width, _doneBtn.frame.size.height);
         [_doneBtn setTitle:@"Submit" forState:UIControlStateNormal];
         _doneBtn.layer.borderWidth = 2.0f;
@@ -201,11 +208,6 @@
     [self.navigationItem setTitle:@"New Task"];
 }
 
--(void)setUpTabBar{
-    UIImage *addIcon = [UIImage imageNamed:@"add-icon"];
-    self.navigationController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Add" image:nil selectedImage:nil];
-    [self.navigationController.tabBarItem setImage: [addIcon imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-}
 
 -(void)nextPage{
     TableViewController *allTasks = [[TableViewController alloc] init];
