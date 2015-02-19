@@ -13,7 +13,8 @@
 #import "CreateToDoViewController.h"
 #import "NotificationsViewController.h"
 #import "SettingsViewController.h"
-#import "CommonViewController.h"
+#import "HomeViewController.h"
+
 
 @interface AppDelegate ()
 @end
@@ -24,8 +25,7 @@
     // Override point for customization after application launch.
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    CommonViewController *common = [[CommonViewController alloc] init];
-    tabBarController.viewControllers = [common initializeViews];
+    tabBarController.viewControllers = [self initializeViews];
     [tabBarController.tabBar setBackgroundColor:[UIColor whiteColor]];
     
     // Set windows config
@@ -44,6 +44,22 @@
     return YES;
 }
 
+# pragma mark - initialize views
+-(NSArray *)initializeViews{
+    TableViewController *tableViewController = [[TableViewController alloc] init];
+    //ViewController *greetingView = [[ViewController alloc] init];
+    CreateToDoViewController *createToDoController = [[CreateToDoViewController alloc] init];
+    UINavigationController *navigationController1 = [[UINavigationController alloc] initWithRootViewController: createToDoController];
+    UINavigationController *navigationController2 = [[UINavigationController alloc] initWithRootViewController: tableViewController];
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
+    UINavigationController *navigationController3 = [[UINavigationController alloc] initWithRootViewController: settingsViewController];
+    navigationController1.navigationBar.backgroundColor = [UIColor lightGrayColor];
+    NotificationsViewController *notificationsViewController = [[NotificationsViewController alloc] init];
+    UINavigationController *navigationController4 = [[UINavigationController alloc] initWithRootViewController: notificationsViewController];
+    HomeViewController *homeViewController = [[HomeViewController alloc] init];
+    NSArray *controllers = [NSArray arrayWithObjects: homeViewController, navigationController1, navigationController2, navigationController4, navigationController3, nil];
+    return controllers;
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -79,12 +95,12 @@
     [notifs showNotifs:notification];
     [notifs setUpIconBadge:application];
     
-    //TableViewController *tableView = [[TableViewController alloc] init];
+//    TableViewController *tableView = [[TableViewController alloc] init];
+//    self.window.rootViewController = tableView;
 }
 
 
 #pragma mark - Facebook Login
-
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     
     return [FBAppCall handleOpenURL:url

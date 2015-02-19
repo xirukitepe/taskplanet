@@ -20,6 +20,5 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 - (NSArray *)initializeViews;
-
 @end
 

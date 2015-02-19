@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController <FBWebDialogsDelegate>
 @property (strong,nonatomic) NSArray *task;
 @end

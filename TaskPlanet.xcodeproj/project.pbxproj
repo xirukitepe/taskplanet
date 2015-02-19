@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		6744E3CA52520CF575A4C4D6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58A4A20D2DA457EFBD21D785 /* libPods.a */; };
 		E85A0F921A93446D00F51CCF /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E85A0F911A93446D00F51CCF /* HomeViewController.m */; };
-		E85A0F951A936B5D00F51CCF /* CommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E85A0F941A936B5D00F51CCF /* CommonViewController.m */; };
 		E85F0CF51A8D090D00E2541B /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E85F0CF41A8D090D00E2541B /* NotificationsViewController.m */; };
+		E8784A651A96840B00EBF123 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8784A611A96822C00EBF123 /* Social.framework */; };
 		E8C9509B1A8CC69F00B1D891 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E8C9509A1A8CC69F00B1D891 /* LaunchScreen.xib */; };
 		E8D3EA981A88B90700101E29 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E8D3EA971A88B90700101E29 /* main.m */; };
 		E8D3EA9B1A88B90700101E29 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E8D3EA9A1A88B90700101E29 /* AppDelegate.m */; };
@@ -45,10 +45,11 @@
 		CFE39EE1373D8CC90A7353A3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		E85A0F901A93446D00F51CCF /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		E85A0F911A93446D00F51CCF /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		E85A0F931A936B5D00F51CCF /* CommonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonViewController.h; sourceTree = "<group>"; };
-		E85A0F941A936B5D00F51CCF /* CommonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonViewController.m; sourceTree = "<group>"; };
 		E85F0CF31A8D090D00E2541B /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
 		E85F0CF41A8D090D00E2541B /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
+		E8784A5D1A967F3800EBF123 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		E8784A5F1A967F3D00EBF123 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		E8784A611A96822C00EBF123 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		E8C9509A1A8CC69F00B1D891 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E8D3EA921A88B90700101E29 /* TaskPlanet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskPlanet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8D3EA961A88B90700101E29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8784A651A96840B00EBF123 /* Social.framework in Frameworks */,
 				E8F520051A92322A002F524A /* CoreGraphics.framework in Frameworks */,
 				E8F520031A923223002F524A /* Foundation.framework in Frameworks */,
 				E8F520011A923219002F524A /* UIKit.framework in Frameworks */,
@@ -114,6 +116,9 @@
 		9C21B66B3B5CF4D77D76A29D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E8784A611A96822C00EBF123 /* Social.framework */,
+				E8784A5F1A967F3D00EBF123 /* Accounts.framework */,
+				E8784A5D1A967F3800EBF123 /* Twitter.framework */,
 				58A4A20D2DA457EFBD21D785 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -187,8 +192,6 @@
 			isa = PBXGroup;
 			children = (
 				E8D3EABE1A88C34A00101E29 /* Constants.h */,
-				E85A0F931A936B5D00F51CCF /* CommonViewController.h */,
-				E85A0F941A936B5D00F51CCF /* CommonViewController.m */,
 			);
 			name = Common;
 			path = ..;
@@ -389,7 +392,6 @@
 				E8D3EA981A88B90700101E29 /* main.m in Sources */,
 				E8F51FEF1A90A0F6002F524A /* SettingsViewController.m in Sources */,
 				E8D3EAC81A88E2A800101E29 /* CreateToDoViewController.m in Sources */,
-				E85A0F951A936B5D00F51CCF /* CommonViewController.m in Sources */,
 				E8D3EAA11A88B90700101E29 /* ViewController.m in Sources */,
 				E85A0F921A93446D00F51CCF /* HomeViewController.m in Sources */,
 				E8D3EAC21A88E00200101E29 /* TableViewController.m in Sources */,

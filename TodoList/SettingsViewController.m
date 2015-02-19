@@ -10,8 +10,6 @@
 #import "Constants.h"
 #import "FeedbackViewController.h"
 #import <CoreData/CoreData.h>
-#import "CreateToDoViewController.h"
-#import "CommonViewController.h"
 
 @interface SettingsViewController ()
 @property (strong, nonatomic) UILabel *avatarLabel;
@@ -41,11 +39,11 @@
     self.userInfo =  [self readData];
     [self.view addSubview:self.avatarLabel];
     [self.view addSubview:self.imagePreview];
-    [self setAvatar];
     [self.view addSubview:self.takePhotoBtn];
     [self.view addSubview:self.pickPhotoBtn];
     [self.view addSubview:self.settingsLabel];
     [self.view addSubview:self.tableView];
+    [self setAvatar];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"CellSettings"];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.rows = @[@"Send Feedback", @"Share to a friend via email", @"Share to a friend via SMS" ,@"Log Out"];
@@ -178,13 +176,13 @@
         
         [self presentViewController:picker animated:YES completion:NULL];
     } else {
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
+        UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                               message:@"Device has no camera"
                                                              delegate:nil
                                                     cancelButtonTitle:@"OK"
                                                     otherButtonTitles: nil];
         
-        [myAlertView show];
+        [errorAlert show];
     }
 }
 
@@ -195,25 +193,6 @@
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
     [self presentViewController:picker animated:YES completion:NULL];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-    self.selectedImage = info[UIImagePickerControllerEditedImage];
-    self.imagePreview.image = self.selectedImage;
-    
-    [picker dismissViewControllerAnimated:YES completion:NULL];
-    
-    if(self.selectedImage){
-        [self saveAvatar:(UIImage * )self.selectedImage];
-    }
-    
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    
-    [picker dismissViewControllerAnimated:YES completion:NULL];
-    
 }
 
 -(BOOL)checkIfCameraIsAvailable{
@@ -322,6 +301,25 @@
 }
 
 #pragma mark - delegate methods
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    self.selectedImage = info[UIImagePickerControllerEditedImage];
+    self.imagePreview.image = self.selectedImage;
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+    if(self.selectedImage){
+        [self saveAvatar:(UIImage * )self.selectedImage];
+    }
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+}
 
 -(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
     switch (result)
