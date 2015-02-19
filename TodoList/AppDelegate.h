@@ -19,7 +19,7 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
--(NSArray *)initializeViews;
+- (NSArray *)initializeViews;
 
 @end
 

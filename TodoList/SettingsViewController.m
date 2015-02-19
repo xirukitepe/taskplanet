@@ -41,6 +41,7 @@
     self.userInfo =  [self readData];
     [self.view addSubview:self.avatarLabel];
     [self.view addSubview:self.imagePreview];
+    [self setAvatar];
     [self.view addSubview:self.takePhotoBtn];
     [self.view addSubview:self.pickPhotoBtn];
     [self.view addSubview:self.settingsLabel];
@@ -59,6 +60,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     self.userInfo = [self readData];
+    [self setAvatar];
 }
 
 #pragma mark - properties
@@ -91,17 +93,6 @@
         _imagePreview.frame = CGRectMake(_imagePreview.frame.origin.x, self.avatarLabel.frame.origin.y + self.avatarLabel.frame.size.height + SCREEN_MARGIN, _imagePreview.frame.size.width, _imagePreview.frame.size.height);
         _imagePreview.layer.borderColor = [UIColor grayColor].CGColor;
         _imagePreview.layer.borderWidth = 1.5f;
-        
-        if([self.userInfo count] != 0){
-            _imagePreview.image = [UIImage imageWithData:[self.userInfo[0] valueForKey:@"avatar"]];
-        } else {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            
-            if([userDefaults objectForKey:@"userID"] == nil){
-                _imagePreview.image = [UIImage imageNamed:@"defaultAvatar"];
-            }
-            _imagePreview.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString: [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=200&height=200", [userDefaults objectForKey:@"userID"]]]]];
-        }
     }
     return _imagePreview;
 }
@@ -156,13 +147,26 @@
 -(NSMutableArray *)readData{
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Profile"];
+
+    // Get userID
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [userDefaults objectForKey:@"userID"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"userID", userID]];
     
     NSMutableArray *fetchedObjects  = [[managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
     
-    
-    //NSLog(@"%@", fetchedObjects);
-    
     return fetchedObjects;
+}
+
+- (void)setAvatar{
+    if([self.userInfo count] != 0){
+        self.imagePreview.image = [UIImage imageWithData:[self.userInfo[0] valueForKey:@"avatar"]];
+    } else {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        if([userDefaults objectForKey:@"userID"] != nil){
+            self.imagePreview.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString: [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=200&height=200", [userDefaults objectForKey:@"userID"]]]]];
+        }
+    }
 }
 
 -(void)takePhoto{
@@ -233,12 +237,17 @@
         // Update Record
         [self.userInfo[0] setValue:convertedImage forKey:@"avatar"];
     } else{
+        
+        // Get userID
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
         // Initialize Record
         NSManagedObject *userInfo = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
         
         // Populate Record
         [userInfo setValue:convertedImage forKey:@"avatar"];
+        [userInfo setValue:[userDefaults objectForKey:@"userID"] forKey:@"userID"];
+        
     }
     
     // Save Record

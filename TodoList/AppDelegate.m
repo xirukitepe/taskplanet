@@ -28,17 +28,18 @@
     tabBarController.viewControllers = [common initializeViews];
     [tabBarController.tabBar setBackgroundColor:[UIColor whiteColor]];
     
+    // Set windows config
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-   self.window.rootViewController = tabBarController;
-   // self.window.rootViewController = homeViewController;
+    self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
     
+    // Set notifications config
     NotificationsViewController *notifs = [[NotificationsViewController alloc] init];
     [notifs registerNotifs:application];
     [notifs launchOptions:launchOptions resetBadge:application];
     
-    [FBLoginView class];
-    [FBProfilePictureView class];
+//    [FBLoginView class];
+//    [FBProfilePictureView class];
     
     return YES;
 }
@@ -78,7 +79,7 @@
     [notifs showNotifs:notification];
     [notifs setUpIconBadge:application];
     
-    TableViewController *tableView = [[TableViewController alloc] init];
+    //TableViewController *tableView = [[TableViewController alloc] init];
 }
 
 

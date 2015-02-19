@@ -102,12 +102,13 @@
     if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
-        return YES;
-    }else {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-         (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
-        return YES;
     }
+//    else {
+//        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+//         (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
+//        return YES;
+//    }
+    return YES;
 }
 
 -(void)showNotifs:(UILocalNotification *)notification{
