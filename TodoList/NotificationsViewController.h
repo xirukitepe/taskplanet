@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NotificationsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface NotificationsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating>
 -(void)setUpIconBadge:(UIApplication * )application;
 -(BOOL)registerNotifs:(UIApplication * )application;
 -(void)showNotifs:(UILocalNotification *)notification;

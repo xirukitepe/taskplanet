@@ -96,7 +96,8 @@
     [notifs setUpIconBadge:application];
     
 //    TableViewController *tableView = [[TableViewController alloc] init];
-//    self.window.rootViewController = tableView;
+//    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+//    [tabBarController presentViewController:tableView animated:YES completion:nil];
 }
 
 

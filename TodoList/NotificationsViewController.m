@@ -8,10 +8,15 @@
 
 #import "NotificationsViewController.h"
 #import "Constants.h"
+#import "CustomTableViewCell.h"
 
 @interface NotificationsViewController ()
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIButton *cancelAllNotifs;
+@property (strong, nonatomic) UISearchBar *searchBar;
+@property (strong, nonatomic) UISearchController *searchController;
+@property (strong, nonatomic) NSArray *searchResults;
+@property (strong, nonatomic) NSMutableArray *localNotifications;
 @end
 
 @implementation NotificationsViewController
@@ -32,10 +37,13 @@
     [self setUpNavigationBar];
     [self.view addSubview:self.cancelAllNotifs];
     [self.view addSubview:self.tableView];
+    self.localNotifications = [self setLocalNotifications];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"CellNotifications"];
+    [self setUpSearch];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    self.localNotifications = [self setLocalNotifications];
     [self.tableView reloadData];
 }
 
@@ -52,6 +60,7 @@
         _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height);
         _tableView.dataSource = self;
         _tableView.delegate = self;
+        _tableView.backgroundColor = [UIColor cyanColor];
     }
     return _tableView;
 }
@@ -69,10 +78,26 @@
 }
 #pragma mark - methods
 
+-(NSMutableArray *)setLocalNotifications{
+    NSMutableArray *localNotifications = [[[UIApplication sharedApplication] scheduledLocalNotifications] mutableCopy];
+    return localNotifications;
+}
+
+-(void)setUpSearch{
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController: nil];
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.frame = CGRectMake(0, 0, 320, 44);
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    self.searchController.definesPresentationContext = YES;
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.delegate = self;
+}
+
 -(void)setUpNavigationBar{
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self.navigationItem setTitle:@"All Notifications"];
 }
+
 
 -(void)setUpIconBadge:(UIApplication *)application{
     application.applicationIconBadgeNumber = 0;
@@ -88,10 +113,9 @@
 }
 
 - (void)cancelAllNotifications{
-    NSMutableArray *localNotifications = [[[UIApplication sharedApplication] scheduledLocalNotifications] mutableCopy];
     // cancel begins here
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    [localNotifications removeAllObjects];
+    [self.localNotifications removeAllObjects];
     [self.tableView reloadData];
 }
 
@@ -132,14 +156,19 @@
 // This will tell your UITableView how many rows you wish to have in each section.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
-    return [localNotifications count];
+    return self.localNotifications.count;
 }
 
 // This will tell your UITableView what data to put in which cells in your table.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"CellNotifications";
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    // Using Custom Cell
+//    CustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    cell = [[CustomTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
@@ -147,15 +176,16 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    // Get list of local notifications
-    NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
-
     if (indexPath.section == 0) {
         // Display notification info
-        if ([localNotifications count] != 0) {
-            UILocalNotification *localNotification = [localNotifications objectAtIndex:indexPath.row];
+        if ([self.localNotifications count] != 0) {
+            UILocalNotification *localNotification = [self.localNotifications objectAtIndex:indexPath.row];
+//            cell.mainLabel.text = localNotification.alertBody;
+//            cell.descriptionLabel.text = [localNotification.fireDate description];
+            
             [cell.textLabel setText:localNotification.alertBody];
             [cell.detailTextLabel setText:[localNotification.fireDate description]];
+            
         }
     }
     
@@ -172,18 +202,16 @@
 {
     
     // Get list of local notifications
-    NSMutableArray *localNotifications = [[[UIApplication sharedApplication] scheduledLocalNotifications] mutableCopy];
-    
     
     if (editingStyle == UITableViewCellEditingStyleDelete){
-        if ([localNotifications count] != 0) {
-            UILocalNotification *localNotification = [localNotifications objectAtIndex:indexPath.row];
+        if ([self.localNotifications count] != 0) {
+            UILocalNotification *localNotification = [self.localNotifications objectAtIndex:indexPath.row];
             // cancel notification
             [[UIApplication sharedApplication] cancelLocalNotification:localNotification];
         }
         
         // Remove the row from data model
-        [localNotifications removeObjectAtIndex:indexPath.row];
+        [self.localNotifications removeObjectAtIndex:indexPath.row];
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
     
@@ -198,8 +226,30 @@
     if(editing == YES)
     {
         [self.tableView setEditing:YES animated:YES];
+    } else {
+        [self.tableView setEditing:NO animated:YES];
     }
     
+}
+
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController{
+    NSString *searchText = [self.searchController.searchBar text];
+    NSLog(@"%@", searchText);
+
+    if([searchText length] > 1){
+        NSPredicate *resultPredicate = [NSPredicate
+                                        predicateWithFormat:@"SELF.alertBody contains[cd] %@",
+                                        searchText];
+        self.localNotifications = [[self.localNotifications filteredArrayUsingPredicate:resultPredicate] mutableCopy];
+    } else {
+        self.localNotifications = [self setLocalNotifications];
+    }
+    [self.tableView reloadData];
+}
+
+-(BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    NSLog(@"test");
+    return YES;
 }
 
 /*

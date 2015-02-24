@@ -20,6 +20,7 @@
 		E8D3EAB51A88B90700101E29 /* TodoListTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E8D3EAB41A88B90700101E29 /* TodoListTests.m */; };
 		E8D3EAC21A88E00200101E29 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E8D3EAC11A88E00200101E29 /* TableViewController.m */; };
 		E8D3EAC81A88E2A800101E29 /* CreateToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E8D3EAC71A88E2A800101E29 /* CreateToDoViewController.m */; };
+		E8E67CC11A9B6F2F00BED12B /* CustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E8E67CC01A9B6F2F00BED12B /* CustomTableViewCell.m */; };
 		E8F239E51A8B9406000D239E /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F239E41A8B9406000D239E /* DetailViewController.m */; };
 		E8F51FEF1A90A0F6002F524A /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F51FEE1A90A0F6002F524A /* SettingsViewController.m */; };
 		E8F51FFD1A92202E002F524A /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F51FFC1A92202E002F524A /* FeedbackViewController.m */; };
@@ -68,6 +69,8 @@
 		E8D3EAC11A88E00200101E29 /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 		E8D3EAC61A88E2A800101E29 /* CreateToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateToDoViewController.h; path = ../CreateToDoViewController.h; sourceTree = "<group>"; };
 		E8D3EAC71A88E2A800101E29 /* CreateToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateToDoViewController.m; path = ../CreateToDoViewController.m; sourceTree = "<group>"; };
+		E8E67CBF1A9B6F2E00BED12B /* CustomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTableViewCell.h; sourceTree = "<group>"; };
+		E8E67CC01A9B6F2F00BED12B /* CustomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTableViewCell.m; sourceTree = "<group>"; };
 		E8F239E31A8B9406000D239E /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		E8F239E41A8B9406000D239E /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		E8F51FED1A90A0F6002F524A /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -225,6 +228,8 @@
 				E8D3EAA01A88B90700101E29 /* ViewController.m */,
 				E8F239E31A8B9406000D239E /* DetailViewController.h */,
 				E8F239E41A8B9406000D239E /* DetailViewController.m */,
+				E8E67CBF1A9B6F2E00BED12B /* CustomTableViewCell.h */,
+				E8E67CC01A9B6F2F00BED12B /* CustomTableViewCell.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -389,6 +394,7 @@
 			files = (
 				E8D3EA9B1A88B90700101E29 /* AppDelegate.m in Sources */,
 				E85F0CF51A8D090D00E2541B /* NotificationsViewController.m in Sources */,
+				E8E67CC11A9B6F2F00BED12B /* CustomTableViewCell.m in Sources */,
 				E8D3EA981A88B90700101E29 /* main.m in Sources */,
 				E8F51FEF1A90A0F6002F524A /* SettingsViewController.m in Sources */,
 				E8D3EAC81A88E2A800101E29 /* CreateToDoViewController.m in Sources */,

@@ -19,6 +19,7 @@
 @property (strong, nonatomic) UIDatePicker *dueDate;
 @property (strong, nonatomic) UITextField *dateSelected;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) UIView *pickerHolder;
 @end
 
 @implementation CreateToDoViewController
@@ -41,7 +42,6 @@
     [self.view addSubview:self.doneBtn];
     [self.view addSubview:self.dateSelected];
     [self.view addSubview:self.dueDate];
-   
 
     [self backgroundImage];
     [self setUpNavigationBar];
@@ -95,6 +95,7 @@
         _taskName.leftView = leftView;
         _taskName.leftViewMode = UITextFieldViewModeAlways;
         _taskName.layer.cornerRadius = 3.0f;
+        _taskName.delegate = self;
     }
     return _taskName;
 }
@@ -117,8 +118,8 @@
 
 -(UIButton *)doneBtn{
     if (!_doneBtn) {
-        _doneBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.wrapper.frame.size.width - SCREEN_MARGIN, BUTTON_HEIGHT)];
-        _doneBtn.center = CGPointMake(SCREEN_CENTER_X, self.dueDate.frame.origin.y + self.dueDate.frame.size.height + ELEM_MARGIN);
+        _doneBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, FULL_WIDTH - SCREEN_MARGIN, BUTTON_HEIGHT)];
+        _doneBtn.center = CGPointMake(SCREEN_CENTER_X, self.tabBarController.tabBar.frame.origin.y - self.tabBarController.tabBar.frame.size.height - (SCREEN_MARGIN * 2) - 25);
         _doneBtn.frame = CGRectMake(_doneBtn.frame.origin.x, _doneBtn.frame.origin.y, _doneBtn.frame.size.width, _doneBtn.frame.size.height);
         [_doneBtn setTitle:@"Submit" forState:UIControlStateNormal];
         _doneBtn.layer.borderWidth = 2.0f;
@@ -137,7 +138,7 @@
 
 -(UITextField *)dateSelected{
     if(!_dateSelected){
-        _dateSelected = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.wrapper.frame.size.width - SCREEN_MARGIN, TEXTFIELD_HEIGHT)];
+        _dateSelected = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, FULL_WIDTH - SCREEN_MARGIN, TEXTFIELD_HEIGHT)];
         _dateSelected.center = CGPointMake(SCREEN_CENTER_X, self.taskDescription.frame.origin.y + self.taskDescription.frame.size.height + ELEM_MARGIN + 5);
         _dateSelected.frame = CGRectMake(_dateSelected.frame.origin.x, _dateSelected.frame.origin.y, _dateSelected.frame.size.width, _dateSelected.frame.size.height);
         _dateSelected.layer.borderWidth = 2.0f;
@@ -157,15 +158,22 @@
 
 -(UIDatePicker *)dueDate{
     if (!_dueDate) {
-        _dueDate = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, self.wrapper.frame.size.width - SCREEN_MARGIN, 50)];
-        _dueDate.center = CGPointMake(SCREEN_CENTER_X, self.dateSelected.frame.origin.y + self.dateSelected.frame.size.height + (ELEM_MARGIN * 2) + (SCREEN_MARGIN * 4));
-        _dueDate.frame = CGRectMake(_dueDate.frame.origin.x, _dueDate.frame.origin.y, _dueDate.frame.size.width, _dueDate.frame.size.height);
+        _dueDate = [[UIDatePicker alloc] initWithFrame:CGRectMake(SCREEN_MARGIN,  self.dateSelected.frame.origin.y + self.dateSelected.frame.size.height - ELEM_MARGIN, FULL_WIDTH, 10)];
         _dueDate.backgroundColor = [UIColor clearColor];
         [_dueDate addTarget:self action:@selector(dateChanged:)
          forControlEvents:UIControlEventValueChanged];
-        
+        [_dueDate sizeThatFits:CGSizeZero];
+        _dueDate.transform = CGAffineTransformMakeScale(0.95f, 0.75f);
     }
     return _dueDate;
+}
+
+-(UIView *)pickerHolder{
+    if (!_pickerHolder) {
+        
+
+    }
+    return _pickerHolder;
 }
 
 #pragma mark - methods
@@ -286,6 +294,34 @@
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     self.taskDescription.text = nil;
+    return YES;
+}
+
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];
+}
+
+-(BOOL)textFieldShouldClear:(UITextField *)textField{
+    NSLog(@"Should Clear");
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.taskName) {
+        [self.taskName resignFirstResponder];
+        [self.taskDescription becomeFirstResponder];
+    }
+    else {
+        [textField resignFirstResponder];
+    }
+    return YES;
+}
+
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+     if([text isEqualToString:@"\n"]) {
+         [textView resignFirstResponder];
+         return NO;
+     }
     return YES;
 }
 
