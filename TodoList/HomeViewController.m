@@ -11,12 +11,18 @@
 #import "TableViewController.h"
 #import "CreateToDoViewController.h"
 #import "SettingsViewController.h"
+#import "LocationViewController.h"
 #import "Constants.h"
 
 @interface HomeViewController ()
 @property (strong, nonatomic) UILabel *welcomeMessage;
 @property (strong, nonatomic) NSString *fullName;
 @property (strong, nonatomic) UILabel *taskPlanet;
+@property (strong, nonatomic) FBLoginView *loginView;
+@property (strong, nonatomic) UIButton *helpBtn;
+@property (strong, nonatomic) UIButton *aboutBtn;
+@property (strong, nonatomic) UIPopoverController *aboutPopover;
+@property (strong, nonatomic) UIButton *locationBtn;
 @end
 
 @implementation HomeViewController
@@ -35,9 +41,13 @@
     [self hideTabBar];
 
     [self.view setBackgroundColor: BUTTON_BG_GREEN];
+    [self.view addSubview:self.bannerView];
     [self.view addSubview:self.taskPlanet];
     [self.view addSubview:self.welcomeMessage];
-    [self facebookLogin];
+    [self.view addSubview:self.loginView];
+    [self.view addSubview:self.helpBtn];
+    [self.view addSubview:self.aboutBtn];
+    [self.view addSubview:self.locationBtn];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -51,6 +61,15 @@
 
 
 #pragma mark - properties
+
+-(ADBannerView *)bannerView{
+    if (!_bannerView) {
+        _bannerView = [[ADBannerView alloc]initWithFrame:
+                       CGRectMake(0, SCREEN_MARGIN * 2, SCREEN_WIDTH, 50)];
+        [_bannerView setBackgroundColor:[UIColor clearColor]];
+    }
+    return _bannerView;
+}
 
 -(UILabel *)taskPlanet{
     if (!_taskPlanet) {
@@ -77,14 +96,90 @@
     return _welcomeMessage;
 }
 
+-(FBLoginView *)loginView{
+    if (!_loginView) {
+        _loginView = [[FBLoginView alloc] initWithFrame:CGRectMake(0, 0, 100, BUTTON_HEIGHT)];
+        _loginView.center = CGPointMake(SCREEN_CENTER_X, self.welcomeMessage.frame.origin.y + self.welcomeMessage.frame.size.height + (ELEM_MARGIN  * 2));
+        _loginView.frame = CGRectMake(_loginView.frame.origin.x, _loginView.frame.origin.y, _loginView.frame.size.width, _loginView.frame.size.height);
+        _loginView.delegate = self;
+        _loginView.readPermissions = @[@"public_profile", @"email"];
+    }
+    return _loginView;
+}
 
--(void)facebookLogin{
-    FBLoginView *loginView = [[FBLoginView alloc] initWithFrame:CGRectMake(0, 0, 100, BUTTON_HEIGHT)];
-    loginView.center = CGPointMake(SCREEN_CENTER_X, self.welcomeMessage.frame.origin.y + self.welcomeMessage.frame.size.height + (ELEM_MARGIN  * 2));
-    loginView.frame = CGRectMake(loginView.frame.origin.x, loginView.frame.origin.y, loginView.frame.size.width, loginView.frame.size.height);
-    loginView.delegate = self;
-    loginView.readPermissions = @[@"public_profile", @"email"];
-    [self.view addSubview:loginView];
+-(UIButton *)helpBtn{
+    if (!_helpBtn) {
+        _helpBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 159, 33)];
+        _helpBtn.center = CGPointMake(SCREEN_CENTER_X, self.loginView.frame.origin.y + self.loginView.frame.size.height + (ELEM_MARGIN * 2));
+        _helpBtn.frame = CGRectMake(_helpBtn.frame.origin.x, _helpBtn.frame.origin.y, _helpBtn.frame.size.width, _helpBtn.frame.size.height);
+        [_helpBtn setTitle:@"Help" forState:UIControlStateNormal];
+        [_helpBtn addTarget:self action:@selector(showHelpMenu) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _helpBtn;
+}
+
+-(UIButton *)aboutBtn{
+    if (!_aboutBtn) {
+        _aboutBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 159, 33)];
+        _aboutBtn.center = CGPointMake(SCREEN_CENTER_X, self.helpBtn.frame.origin.y + self.helpBtn.frame.size.height + SCREEN_MARGIN);
+        _aboutBtn.frame = CGRectMake(_aboutBtn.frame.origin.x, _aboutBtn.frame.origin.y, _aboutBtn.frame.size.width, _aboutBtn.frame.size.height);
+        [_aboutBtn setTitle:@"About" forState:UIControlStateNormal];
+        [_aboutBtn addTarget:self action:@selector(showAboutWindow:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _aboutBtn;
+}
+
+-(UIButton *)locationBtn{
+    if (!_locationBtn) {
+        _locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 159, 33)];
+        _locationBtn.center = CGPointMake(SCREEN_CENTER_X, self.aboutBtn.frame.origin.y + self.aboutBtn.frame.size.height + SCREEN_MARGIN);
+        _locationBtn.frame = CGRectMake(_locationBtn.frame.origin.x, _locationBtn.frame.origin.y, _locationBtn.frame.size.width, _locationBtn.frame.size.height);
+        [_locationBtn setTitle:@"Our Location" forState:UIControlStateNormal];
+        [_locationBtn addTarget:self action:@selector(goToLocationPage) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _locationBtn;
+}
+
+#pragma mark - methods
+
+-(void)goToLocationPage{
+     LocationViewController *locationPage = [[LocationViewController alloc] init];
+    [self presentViewController:locationPage animated:YES completion:nil];
+}
+
+-(void)showHelpMenu{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Help!"
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"Todo list items", @"Notifications", @"Profile", nil];
+    actionSheet.tag = 100;
+    [actionSheet showInView:self.view];
+}
+
+-(void)showAboutWindow:(id)sender{
+//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"About this app"
+//                                                             delegate:self
+//                                                    cancelButtonTitle:@"Cancel"
+//                                               destructiveButtonTitle:nil
+//                                                    otherButtonTitles:@"Todo list items", @"Notifications", @"Profile", nil];
+//    actionSheet.tag = 200;
+//    [actionSheet showInView:self.view];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        FeedbackViewController *feedbackPage = [[FeedbackViewController alloc] initWithNibName:@"FeedbackViewController" bundle:nil];
+        feedbackPage.delegate = self;
+        self.aboutPopover = [[UIPopoverController alloc] initWithContentViewController:feedbackPage];
+        self.aboutPopover.popoverContentSize = CGSizeMake(320.0, 400.0);
+        [self.aboutPopover presentPopoverFromRect:[(UIButton *)sender frame]
+                                           inView:self.view
+                         permittedArrowDirections:UIPopoverArrowDirectionAny
+                                         animated:YES];
+    } else {
+        NSLog(@"No popovers for iphone!!!");
+    }
+    
+    
 }
 
 -(void)setUpTabBar{
@@ -107,6 +202,37 @@
 }
 
 #pragma mark - delegate methods
+
+-(void)bannerView:(ADBannerView *)banner
+didFailToReceiveAdWithError:(NSError *)error{
+    NSLog(@"Error loading");
+}
+
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner{
+    NSLog(@"Ad loaded");
+}
+-(void)bannerViewWillLoadAd:(ADBannerView *)banner{
+    NSLog(@"Ad will load");
+}
+-(void)bannerViewActionDidFinish:(ADBannerView *)banner{
+    NSLog(@"Ad did finish");
+    
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (actionSheet.tag == 100) {
+        NSLog(@"The Normal action sheet.");
+    }
+    else if (actionSheet.tag == 200){
+        NSLog(@"The Delete confirmation action sheet.");
+    }
+    else{
+        NSLog(@"The Color selection action sheet.");
+    }
+    
+    NSLog(@"Index = %ld - Title = %@", (long)buttonIndex, [actionSheet buttonTitleAtIndex:buttonIndex]);
+}
+
 -(void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user{
     if (user) {
         NSLog(@"%@", user);

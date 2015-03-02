@@ -11,6 +11,8 @@
 		E85A0F921A93446D00F51CCF /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E85A0F911A93446D00F51CCF /* HomeViewController.m */; };
 		E85F0CF51A8D090D00E2541B /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E85F0CF41A8D090D00E2541B /* NotificationsViewController.m */; };
 		E8784A651A96840B00EBF123 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8784A611A96822C00EBF123 /* Social.framework */; };
+		E87DBB871AA462C700D4A83E /* MapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E87DBB861AA462C700D4A83E /* MapAnnotation.m */; };
+		E87DBB8A1AA463BC00D4A83E /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E87DBB891AA463BC00D4A83E /* LocationViewController.m */; };
 		E8C9509B1A8CC69F00B1D891 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E8C9509A1A8CC69F00B1D891 /* LaunchScreen.xib */; };
 		E8D3EA981A88B90700101E29 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E8D3EA971A88B90700101E29 /* main.m */; };
 		E8D3EA9B1A88B90700101E29 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E8D3EA9A1A88B90700101E29 /* AppDelegate.m */; };
@@ -51,6 +53,10 @@
 		E8784A5D1A967F3800EBF123 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		E8784A5F1A967F3D00EBF123 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		E8784A611A96822C00EBF123 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		E87DBB851AA462C700D4A83E /* MapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapAnnotation.h; sourceTree = "<group>"; };
+		E87DBB861AA462C700D4A83E /* MapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapAnnotation.m; sourceTree = "<group>"; };
+		E87DBB881AA463BC00D4A83E /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		E87DBB891AA463BC00D4A83E /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
 		E8C9509A1A8CC69F00B1D891 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E8D3EA921A88B90700101E29 /* TaskPlanet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskPlanet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8D3EA961A88B90700101E29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -222,6 +228,10 @@
 				E8F51FEE1A90A0F6002F524A /* SettingsViewController.m */,
 				E8F51FFB1A92202E002F524A /* FeedbackViewController.h */,
 				E8F51FFC1A92202E002F524A /* FeedbackViewController.m */,
+				E87DBB851AA462C700D4A83E /* MapAnnotation.h */,
+				E87DBB861AA462C700D4A83E /* MapAnnotation.m */,
+				E87DBB881AA463BC00D4A83E /* LocationViewController.h */,
+				E87DBB891AA463BC00D4A83E /* LocationViewController.m */,
 				E8D3EAC01A88E00200101E29 /* TableViewController.h */,
 				E8D3EAC11A88E00200101E29 /* TableViewController.m */,
 				E8D3EA9F1A88B90700101E29 /* ViewController.h */,
@@ -393,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8D3EA9B1A88B90700101E29 /* AppDelegate.m in Sources */,
+				E87DBB871AA462C700D4A83E /* MapAnnotation.m in Sources */,
 				E85F0CF51A8D090D00E2541B /* NotificationsViewController.m in Sources */,
 				E8E67CC11A9B6F2F00BED12B /* CustomTableViewCell.m in Sources */,
 				E8D3EA981A88B90700101E29 /* main.m in Sources */,
@@ -400,6 +411,7 @@
 				E8D3EAC81A88E2A800101E29 /* CreateToDoViewController.m in Sources */,
 				E8D3EAA11A88B90700101E29 /* ViewController.m in Sources */,
 				E85A0F921A93446D00F51CCF /* HomeViewController.m in Sources */,
+				E87DBB8A1AA463BC00D4A83E /* LocationViewController.m in Sources */,
 				E8D3EAC21A88E00200101E29 /* TableViewController.m in Sources */,
 				E8F51FFD1A92202E002F524A /* FeedbackViewController.m in Sources */,
 				E8D3EA9E1A88B90700101E29 /* TodoList.xcdatamodeld in Sources */,

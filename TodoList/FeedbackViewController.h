@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FeedbackViewController : UIViewController
+@protocol FeedbackViewControllerDelegate;
 
+@protocol FeedbackViewControllerDelegate <NSObject>
+@end
+
+@interface FeedbackViewController : UIViewController
+{
+    id<FeedbackViewControllerDelegate> _delegate;
+}
+@property (nonatomic,strong) id delegate;
 @end

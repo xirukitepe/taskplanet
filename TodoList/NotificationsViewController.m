@@ -120,18 +120,37 @@
 }
 
 -(BOOL)registerNotifs:(UIApplication *)application{
-    UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-    
     if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
-        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        UIMutableUserNotificationAction *action1 = [[UIMutableUserNotificationAction alloc] init];
+        action1.activationMode = UIUserNotificationActivationModeForeground;
+        action1.title = @"Action 1";
+        action1.identifier = @"ACTION_ONE";
+        action1.destructive = NO;
+        action1.authenticationRequired = NO;
+        
+        UIMutableUserNotificationAction *action2 = [[UIMutableUserNotificationAction alloc] init];
+        action2.activationMode = UIUserNotificationActivationModeForeground;
+        action2.title = @"Action 2";
+        action2.identifier = @"ACTION_TWO";
+        action2.destructive = NO;
+        action2.authenticationRequired = NO;
+        
+        UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
+        category.identifier = @"COUNTER_CATEGORY";
+        [category setActions:@[action1, action2] forContext:UIUserNotificationActionContextDefault];
+        
+        NSSet *categories = [NSSet setWithObject:category];
+        UIUserNotificationType types = (UIUserNotificationTypeAlert|
+                                        UIUserNotificationTypeSound|
+                                        UIUserNotificationTypeBadge);
+        
+        UIUserNotificationSettings *settings;
+        
+        settings = [UIUserNotificationSettings settingsForTypes:types
+                                                     categories:categories];
+        
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     }
-//    else {
-//        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-//         (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
-//        return YES;
-//    }
     return YES;
 }
 
@@ -250,6 +269,22 @@
 -(BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     NSLog(@"test");
     return YES;
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler {
+    
+    if ([identifier isEqualToString:@"ACTION_ONE"]) {
+        
+        NSLog(@"You chose action 1.");
+    }
+    else if ([identifier isEqualToString:@"ACTION_TWO"]) {
+        
+        NSLog(@"You chose action 2.");
+    }
+    if (completionHandler) {
+        
+        completionHandler();
+    }
 }
 
 /*

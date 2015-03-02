@@ -42,6 +42,8 @@
     [self.view addSubview:self.doneBtn];
     [self.view addSubview:self.dateSelected];
     [self.view addSubview:self.dueDate];
+    
+    [self setUpConstraints];
 
     [self backgroundImage];
     [self setUpNavigationBar];
@@ -152,6 +154,7 @@
         _dateSelected.layer.cornerRadius = 3.0f;
         _dateSelected.enabled = NO;
         _dateSelected.text = [self formattedDate];
+        
     }
     return _dateSelected;
 }
@@ -177,6 +180,29 @@
 }
 
 #pragma mark - methods
+
+-(void)setUpConstraints{
+    //9. Text field Constraints
+    NSLayoutConstraint *textFieldTopConstraint = [NSLayoutConstraint
+                                                  constraintWithItem:self.dateSelected attribute:NSLayoutAttributeTop
+                                                  relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.view
+                                                  attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.0f];
+    NSLayoutConstraint *textFieldBottomConstraint = [NSLayoutConstraint
+                                                     constraintWithItem:self.dateSelected attribute:NSLayoutAttributeTop
+                                                     relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.taskDescription
+                                                     attribute:NSLayoutAttributeTop multiplier:0.8 constant:-60.0f];
+    NSLayoutConstraint *textFieldLeftConstraint = [NSLayoutConstraint
+                                                   constraintWithItem:self.dateSelected attribute:NSLayoutAttributeLeft
+                                                   relatedBy:NSLayoutRelationEqual toItem:self.view attribute:
+                                                   NSLayoutAttributeLeft multiplier:1.0 constant:30.0f];
+    NSLayoutConstraint *textFieldRightConstraint = [NSLayoutConstraint 
+                                                    constraintWithItem:self.dateSelected attribute:NSLayoutAttributeRight
+                                                    relatedBy:NSLayoutRelationEqual toItem:self.view attribute:
+                                                    NSLayoutAttributeRight multiplier:1.0 constant:-30.0f];
+    [self.view addConstraints:@[textFieldBottomConstraint ,
+                                textFieldLeftConstraint, textFieldRightConstraint, 
+                                textFieldTopConstraint]];
+}
 
 - (NSManagedObjectContext *)managedObjectContext {
     NSManagedObjectContext *context = nil;
@@ -281,6 +307,7 @@
     localNotification.alertBody = self.taskName.text;
     localNotification.alertAction = @"check todo item!";
     localNotification.alertLaunchImage = @"AppIcon";
+    localNotification.category = @"COUNTER_CATEGORY";
     localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     //[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
